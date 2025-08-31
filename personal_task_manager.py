@@ -11,8 +11,10 @@ def add_task():
     return True
 
 def show_task():
-    for task in cursor.execute("SELECT title, duration, status FROM tasks"):
-        print(task)
+    print(f"{'Title':20} {'Duration':10} {'Status':7}")
+    print("-" * 40)
+    for title, duration, status in cursor.execute("SELECT title, duration, status FROM tasks"):
+        print(f"{title:20} {duration:10} {'Done' if status else 'Pending':7}")
 
 def delete_task():
     title = input("Enter task name: ")
@@ -24,25 +26,28 @@ def delete_task():
         connection.commit()
         print("Task successfully deleted")
 
-while True:
-    action = input("command: ").lower().strip()
-    if action in ["new task", "nt"]:
-        stat = add_task()
-        if stat == True:
-            print("Task added successfully.")
-    elif action == "show":
-        show_task()
-    elif action in ["del", "delete"]:
-        delete_task()
-    elif action in ["exit", "quit"]:
-        connection.close()
-        exit()
-    elif action.lower().strip() == "help":
-        print('You can add a task by command "new task" or "nt".')
-        print('You can delete a task using "delete" or "del.')
-        print('To print tasks, simply enter "show".')
-        print('Enter "quit" or "exit" to save the tasks and quit.')
-    else:
-        print("Invalid operation")
-        print('For more information, enter "help"')
-    
+def main():
+    while True:
+        action = input("command: ").lower().strip()
+        if action in ["new task", "nt"]:
+            stat = add_task()
+            if stat == True:
+                print("Task added successfully.")
+        elif action == "show":
+            show_task()
+        elif action in ["del", "delete"]:
+            delete_task()
+        elif action in ["exit", "quit"]:
+            connection.close()
+            exit()
+        elif action.lower().strip() == "help":
+            print('You can add a task by command "new task" or "nt".')
+            print('You can delete a task using "delete" or "del.')
+            print('To print tasks, simply enter "show".')
+            print('Enter "quit" or "exit" to save the tasks and quit.')
+        else:
+            print("Invalid operation")
+            print('For more information, enter "help"')
+
+if __name__ == "__main__":
+    main()
